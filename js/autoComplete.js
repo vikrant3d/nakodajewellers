@@ -21,6 +21,9 @@ function autocomplete(inp, arr) {
         if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
           /*create a DIV element for each matching element:*/
           b = document.createElement("DIV");
+		  if(arr[i].substr(arr[i].length-1) == "C"){
+			b.style.color="red"
+		  }
           /*make the matching letters bold:*/
           b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
           b.innerHTML += arr[i].substr(val.length);
@@ -99,11 +102,12 @@ function autocomplete(inp, arr) {
 }
 var imgid = 0;
 function getCustomerDetails(value){
+	var value1 = value
   $('#lodaingModal').modal('show');
-		var index = value.lastIndexOf("#")+2;
+		value1 = value1.substr(0,value1.lastIndexOf("#")-1)
 		$.ajax({
 		  type: 'POST',
-      data: '{"custid":"'+value.substring(index)+'"}',
+      data: '{"custid":"'+value1.substr(value1.lastIndexOf("#")+2)+'"}',
 		  url: contextPath +"editCustomerIntrestData",
 		  success: function (response) {
         $("#paymentDetailsSection").show();
@@ -123,10 +127,14 @@ function getCustomerDetails(value){
           $("#dateOfRequest").html($(response1).attr('dateOfRequest'));
           var response2 = $(response).get(1);
           $('#custPic-image').attr('src','data:image/png;base64,'+$(response2).attr('custPic'));   
-          $('#itemPic-image').attr('src','data:image/png;base64,'+$(response2).attr('itemPic'));   
+          $('#itemPic-image').attr('src','data:image/png;base64,'+$(response2).attr('itemPic'));
+		  $('#docPic-image').attr('src','data:image/png;base64,'+$(response2).attr('docPic')); 		  
           $('#lodaingModal').modal('hide');
           $("#intrestDetails").html( $(response).get(2));
-           $('#lodaingModal').modal('hide');
+          $('#lodaingModal').modal('hide');
+			if($(response1).attr('currentStatus') == 'C'){
+				$("#makePayment").hide();
+			}
 
            $($(response1).attr('transactionList')).each(function(i,response3){
                 var newRow = "<tr><td >"+(++i)+"</td><td>Payment made on "+$(response3).attr("dateOfTransaction")+", with amount "+$(response3).attr("amountPay")+" Rs, have Rate Of Intrest "+$(response3).attr("rateOfIntrest")+"%</td></tr>";
@@ -138,8 +146,11 @@ function getCustomerDetails(value){
 			});
 }
 
+var map={};
+	map["token"]=sessionStorage.getItem(code + "_token");
 $.ajax({
   type: 'POST',
+  data: JSON.stringify(map),
   url: contextPath +"getAllCustomerInfo",
   success: function (response1) { 
 /*An array containing all the country names in the world:*/
@@ -148,8 +159,14 @@ var countries = response1;
 /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
 autocomplete(document.getElementById("myInput"), countries);
 
-		}
-	});
+		},
+		error : function (response) { 
+		alert("Error : "+response.responseText);
+		location.href="login.html"
+        }
+
+});
+
 	
 	
 	

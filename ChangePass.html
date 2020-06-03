@@ -120,22 +120,27 @@
 							</div>
 							&nbsp;&nbsp;<b>Nakoda Jewellers</b>
 						</div>
+						
 						<div class="input-group mb-2">
 							<div class="input-group-append">
 								<span class="input-group-text"><i class="fas fa-key"></i></span>
 							</div>
-							<input type="password" id="password" onkeypress="return hideError()" class="form-control input_pass" value="" placeholder="password">
+							<input type="text" id="newpassword" onkeypress="return hideError()" class="form-control input_pass" value="" placeholder="Enter New Password">
 						</div>
-						<div class="form-group">
-							<div class="custom-control custom-checkbox">
-								<input type="checkbox" class="custom-control-input" id="customControlInline">
-								<label class="custom-control-label" for="customControlInline">Remember me</label>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<span class="input-group-text"><i class="fas fa-key"></i></span>
 							</div>
+							<input type="password" id="confirmpassword" onkeypress="return hideError()" class="form-control input_pass" value="" placeholder="Confirm New Password">
 						</div>
+						
 					</form>
 				</div>
 				<div class="d-flex justify-content-center mt-3 login_container">
-					<button type="button" name="button" class="btn login_btn" onclick="return doLogin()">Login</button>
+					<button type="button" name="button" class="btn login_btn" onclick="return changePassword()">Submit New Password</button>
+				</div>
+				<div class="d-flex justify-content-center mt-3 login_container">
+					<button type="button" name="button" class="btn login_btn" onclick="javascript:location.href='CustRegistration.html'">Go Back</button>
 				</div>
 				
 				<div class="cpy-right text-center py-3">

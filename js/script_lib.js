@@ -1,4 +1,5 @@
-var contextPath = "https://53uqb9vn2m.execute-api.ap-southeast-1.amazonaws.com/dev/NK/";
+var code = "NK/";
+var contextPath = "https://53uqb9vn2m.execute-api.ap-southeast-1.amazonaws.com/dev/"+code;
 var NumberRegex = /^[0-9]*$/;
 function getFormData(form){
     var unindexed_array = $(form).serializeArray();
@@ -17,6 +18,25 @@ function getFormData(form){
     return indexed_array;
 }
 
+function doLogin(){
+	var map={};
+	map["venderPass"]=$("#password").val();
+			
+	$.ajax({
+		  type: 'POST',
+		  data: JSON.stringify(map),		 
+		  url: contextPath +"checkLogin",
+		  success: function (response1) { 	
+					if(response1.length == 8){
+						sessionStorage.setItem(code + "_token", response1);
+						location.href="CustRegistration.html"
+					}else{
+						$("#passwordError").show();
+					}					
+				}
+			});
+}
+
 function submitCustDetails(obj){
 	if(! checkValidation()){		
 		return false;
@@ -29,6 +49,9 @@ function submitCustDetails(obj){
 	}
 	if($("#custPic-image").attr('src') != undefined && $("#custPic-image").attr('src') != ""){
 		$("#custPic").val($("#custPic-image").attr('src').split(',')[1]);
+	}
+	if($("#docPic-image").attr('src') != undefined && $("#docPic-image").attr('src') != ""){
+		$("#docPic").val($("#docPic-image").attr('src').split(',')[1]);
 	}
 	 $.ajax({
 	  type: 'POST',
@@ -85,7 +108,7 @@ function submitCustAmount(obj){
 	if($("#amountPay").val() =="" || $("#dateOfTransaction").val() == ""){
 			alert("Please enter required details");
 	}else{
-		var r = confirm("ARe you sure you want to make payment?");
+		var r = confirm("Are you sure you want to make payment?");
 		if (r == true) {
 			$('#lodaingModal').modal('show');
 			var map={};
@@ -164,7 +187,8 @@ function fetchCustomerDetails(obj){
 		$("#dateOfRequest").val($(response1).attr('dateOfRequest'));
 		var response2 = $(response).get(1);
 		$('#custPic-image').attr('src','data:image/png;base64,'+$(response2).attr('custPic'));   
-		$('#itemPic-image').attr('src','data:image/png;base64,'+$(response2).attr('itemPic'));   
+		$('#itemPic-image').attr('src','data:image/png;base64,'+$(response2).attr('itemPic'));  
+		$('#docPic-image').attr('src','data:image/png;base64,'+$(response2).attr('docPic'));  		
 		$('#lodaingModal').modal('hide');
 	}
 });	
@@ -177,16 +201,20 @@ function newCustDetails(){
 
 function getAllCustDetails(){
 	$('#lodaingModal').modal('show');
+	var map={};
+	map["token"]=sessionStorage.getItem(code + "_token");
+			
   $.ajax({
   type: 'POST',
-  data:"",
+  data: JSON.stringify(map),
   url: contextPath +"listCustomer",
   success: function (response) { 
 		generateCustRow(response);
 		$('#lodaingModal').modal('hide');
        },
   error : function (response) { 
-		alert("Error "+response);
+		alert("Error : "+response.responseText);
+		location.href="login.html"
 		$('#lodaingModal').modal('hide');
         }
 
@@ -204,6 +232,11 @@ function fetchCustPayImageDetails(custid){
 	}
 	function resizeCustPic(){
 		resizeImageToSpecificWidth("custPic",input2);
+		
+	}
+	
+	function resizeDocPic(){
+		resizeImageToSpecificWidth("docPic",input3);
 		
 	}
 
@@ -237,3 +270,36 @@ function fetchCustPayImageDetails(custid){
             reader.readAsDataURL(myInput.files[0]);
         }
     }
+
+function changePassword(){
+	
+	if($("#newpassword").val() == $("#confirmpassword").val()){
+		
+			var map={};
+			map["token"]=sessionStorage.getItem(code + "_token");
+			map["venderPass"]=$("#newpassword").val();
+					
+		  $.ajax({
+		  type: 'POST',
+		  data: JSON.stringify(map),
+		  url: contextPath +"updatePassword",
+		  success: function (response) { 
+				alert("Password updated successfully.")
+				
+				location.href="login.html"
+			   },
+		  error : function (response) { 
+				alert("Error : "+response.responseText);
+				
+				location.href="login.html"
+				}
+
+		});
+		
+		
+	}else{
+		alert("Your New Password and Confirm Password does not match")
+	}
+	
+	
+}
