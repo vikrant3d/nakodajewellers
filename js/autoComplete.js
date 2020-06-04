@@ -24,6 +24,7 @@ function autocomplete(inp, arr) {
 		  if(arr[i].substr(arr[i].length-1) == "C"){
 			b.style.color="red"
 		  }
+		  $("html, body").animate({ scrollTop: 0 }, "slow");
           /*make the matching letters bold:*/
           b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
           b.innerHTML += arr[i].substr(val.length);
@@ -137,7 +138,7 @@ function getCustomerDetails(value){
 			}
 
            $($(response1).attr('transactionList')).each(function(i,response3){
-                var newRow = "<tr><td >"+(++i)+"</td><td>Payment made on "+$(response3).attr("dateOfTransaction")+", with amount "+$(response3).attr("amountPay")+" Rs, have Rate Of Intrest "+$(response3).attr("rateOfIntrest")+"%</td></tr>";
+                var newRow = "<tr><td >"+(++i)+"</td><td>Payment made on "+$(response3).attr("dateOfTransaction")+", with amount "+$(response3).attr("amountPay")+" Rs, have Rate Of Intrest "+$(response3).attr("rateOfIntrest")+"%, Note "+$(response3).attr("additionalNote")+".</td></tr>";
                 $("#custDetailsTable tbody").append(newRow);
                 });
 		

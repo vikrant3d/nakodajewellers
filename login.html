@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="zxx">
 <head>
-    <title>Mahesh Gym Fitness</title>
+    <title>Nakoda Jewellers</title>
 	  <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8" />
 	   <link rel="shortcut icon" href="assets/images/logo.png" type="image/x-icon">
@@ -111,7 +111,7 @@
 				</div>
 				<div class="d-flex justify-content-center form_container">
 					<form>
-						<div class="input-group mb-3" style="display:none;" id="passwordError">
+						<div class="input-group mb-3" style="display:none;margin-top: 36px;" id="passwordError">
 							<b style="color:red">Please Enter valid password</b>
 						</div>
 						<div class="input-group mb-3">
@@ -124,7 +124,7 @@
 							<div class="input-group-append">
 								<span class="input-group-text"><i class="fas fa-key"></i></span>
 							</div>
-							<input type="password" id="password" onkeypress="return hideError()" class="form-control input_pass" value="" placeholder="password">
+							<input type="password" id="password" onkeyup="return hideError()" class="form-control input_pass" value="" placeholder="password">
 						</div>
 						<div class="form-group">
 							<div class="custom-control custom-checkbox">
@@ -135,7 +135,7 @@
 					</form>
 				</div>
 				<div class="d-flex justify-content-center mt-3 login_container">
-					<button type="button" name="button" class="btn login_btn" onclick="return doLogin()">Login</button>
+					<input type="button" name="button" class="btn login_btn" value="Login " onclick="return doLogin(this)" />
 				</div>
 				
 				<div class="cpy-right text-center py-3">

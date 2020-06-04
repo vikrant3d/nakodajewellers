@@ -18,10 +18,10 @@ function getFormData(form){
     return indexed_array;
 }
 
-function doLogin(){
+function doLogin(obj){
 	var map={};
 	map["venderPass"]=$("#password").val();
-			
+	$(obj).attr('value','Please wait...').prop('disabled',true);		
 	$.ajax({
 		  type: 'POST',
 		  data: JSON.stringify(map),		 
@@ -31,6 +31,7 @@ function doLogin(){
 						sessionStorage.setItem(code + "_token", response1);
 						location.href="CustRegistration.html"
 					}else{
+						$(obj).attr('value','Login').prop('disabled',false);
 						$("#passwordError").show();
 					}					
 				}
@@ -104,7 +105,12 @@ function checkValidation(){
 }
 
 function submitCustAmount(obj){
-	
+	if($("#currentStatus").val() == 'C'){
+		var r = confirm("Are you sure you to Close this case, Once you closed this case you will not able to reopen it again");
+		if (r == false) {
+			return false;
+		}
+	}
 	if($("#amountPay").val() =="" || $("#dateOfTransaction").val() == ""){
 			alert("Please enter required details");
 	}else{
@@ -115,6 +121,8 @@ function submitCustAmount(obj){
 			map["custid"]=$("#customerid").val();
 			map["amountPay"]=$("#amountPay").val();
 			map["dateOfTransaction"]=$("#dateOfTransaction").val();
+			map["additionalNote"]=$("#additionalNote").val();
+			map["currentStatus"]=$("#currentStatus").val();
 					
 			  $.ajax({
 			  type: 'POST',
@@ -190,6 +198,7 @@ function fetchCustomerDetails(obj){
 		$('#itemPic-image').attr('src','data:image/png;base64,'+$(response2).attr('itemPic'));  
 		$('#docPic-image').attr('src','data:image/png;base64,'+$(response2).attr('docPic'));  		
 		$('#lodaingModal').modal('hide');
+		$("html, body").animate({ scrollTop: 0 }, "slow");
 	}
 });	
 	return false;
@@ -272,6 +281,9 @@ function fetchCustPayImageDetails(custid){
     }
 
 function changePassword(){
+	if($("#newpassword").val() == ""){
+		alert('Please enter valid Password')
+	}
 	
 	if($("#newpassword").val() == $("#confirmpassword").val()){
 		
