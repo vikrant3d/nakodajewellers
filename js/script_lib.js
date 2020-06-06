@@ -282,7 +282,8 @@ function fetchCustPayImageDetails(custid){
 
 function changePassword(){
 	if($("#newpassword").val() == ""){
-		alert('Please enter valid Password')
+		alert('Password should not be blank');
+		return false;
 	}
 	
 	if($("#newpassword").val() == $("#confirmpassword").val()){
